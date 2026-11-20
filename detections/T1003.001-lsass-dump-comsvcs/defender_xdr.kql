@@ -1,0 +1,15 @@
+// LSASS Memory Dump via comsvcs.dll MiniDump (T1003.001)
+// Microsoft Defender XDR - Advanced Hunting / Custom detection rule
+// Returns Timestamp, DeviceId and ReportId so it can be saved as a custom detection.
+DeviceProcessEvents
+| where Timestamp > ago(1h)
+| where FileName =~ "rundll32.exe"
+    or ProcessVersionInfoOriginalFileName =~ "RUNDLL32.EXE"
+| where ProcessCommandLine contains "comsvcs"
+| where ProcessCommandLine contains "minidump"
+    or ProcessCommandLine contains "#24"
+    or ProcessCommandLine contains "#+24"
+| project Timestamp, DeviceId, DeviceName, ReportId,
+          AccountDomain, AccountName,
+          FileName, ProcessVersionInfoOriginalFileName, ProcessCommandLine,
+          InitiatingProcessFileName, InitiatingProcessCommandLine

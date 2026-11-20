@@ -1,0 +1,34 @@
+[
+  {
+    "description": "Normal rundll32 use: Control Panel applet",
+    "event": {
+      "Image": "C:\\Windows\\System32\\rundll32.exe",
+      "OriginalFileName": "RUNDLL32.EXE",
+      "CommandLine": "rundll32.exe shell32.dll,Control_RunDLL desk.cpl"
+    }
+  },
+  {
+    "description": "comsvcs.dll loaded through rundll32 for an unrelated export",
+    "event": {
+      "Image": "C:\\Windows\\System32\\rundll32.exe",
+      "OriginalFileName": "RUNDLL32.EXE",
+      "CommandLine": "rundll32.exe comsvcs.dll,DllRegisterServer"
+    }
+  },
+  {
+    "description": "comsvcs.dll registered with regsvr32, not rundll32",
+    "event": {
+      "Image": "C:\\Windows\\System32\\regsvr32.exe",
+      "OriginalFileName": "REGSVR32.EXE",
+      "CommandLine": "regsvr32.exe /s comsvcs.dll"
+    }
+  },
+  {
+    "description": "LSASS dump with a different tool: out of scope for this rule",
+    "event": {
+      "Image": "C:\\Tools\\procdump64.exe",
+      "OriginalFileName": "procdump",
+      "CommandLine": "procdump64.exe -accepteula -ma lsass.exe C:\\Temp\\l.dmp"
+    }
+  }
+]

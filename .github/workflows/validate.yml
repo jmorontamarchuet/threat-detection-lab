@@ -1,0 +1,33 @@
+name: Validate detections
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Sigma syntax and quality check
+        run: sigma check detections/
+
+      - name: Structure, unit tests and KQL conversion
+        run: python tools/validate.py
+
+      - name: Upload generated KQL
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-kql
+          path: build/
+          if-no-files-found: ignore

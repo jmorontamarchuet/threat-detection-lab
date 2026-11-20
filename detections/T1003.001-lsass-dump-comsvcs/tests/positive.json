@@ -1,0 +1,42 @@
+[
+  {
+    "description": "Classic MiniDump export called by name",
+    "event": {
+      "Image": "C:\\Windows\\System32\\rundll32.exe",
+      "OriginalFileName": "RUNDLL32.EXE",
+      "CommandLine": "rundll32.exe C:\\Windows\\System32\\comsvcs.dll, MiniDump 624 C:\\Users\\Public\\out.dmp full"
+    }
+  },
+  {
+    "description": "Export called by ordinal #24 to evade name-based detections",
+    "event": {
+      "Image": "C:\\Windows\\System32\\rundll32.exe",
+      "OriginalFileName": "RUNDLL32.EXE",
+      "CommandLine": "rundll32.exe comsvcs.dll #24 624 C:\\Temp\\a.dmp full"
+    }
+  },
+  {
+    "description": "Ordinal written as #+24",
+    "event": {
+      "Image": "C:\\Windows\\System32\\rundll32.exe",
+      "OriginalFileName": "RUNDLL32.EXE",
+      "CommandLine": "rundll32 comsvcs.dll,#+24 624 C:\\Temp\\b.dmp full"
+    }
+  },
+  {
+    "description": "Renamed rundll32 copy, caught through OriginalFileName",
+    "event": {
+      "Image": "C:\\Users\\Public\\notepad.exe",
+      "OriginalFileName": "RUNDLL32.EXE",
+      "CommandLine": "notepad.exe C:\\Windows\\System32\\comsvcs.dll,MiniDumpW 624 C:\\Temp\\c.dmp full"
+    }
+  },
+  {
+    "description": "Mixed case to evade case-sensitive matching",
+    "event": {
+      "Image": "C:\\Windows\\System32\\RUNDLL32.EXE",
+      "OriginalFileName": "RUNDLL32.EXE",
+      "CommandLine": "RunDll32.exe COMSVCS.DLL, MiNiDuMp 624 C:\\Temp\\d.dmp full"
+    }
+  }
+]

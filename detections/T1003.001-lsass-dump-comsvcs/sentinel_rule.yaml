@@ -1,0 +1,47 @@
+id: 6c9b7d90-9497-4ccf-b668-2d477058d3f4
+name: LSASS Memory Dump via comsvcs.dll MiniDump
+description: |
+  'Detects rundll32 loading comsvcs.dll to call its MiniDump export, a living-off-the-land
+  technique used to dump LSASS process memory (T1003.001). Covers the export called by name
+  and by ordinal (#24), and renamed copies of rundll32 through the original file name.'
+severity: High
+requiredDataConnectors:
+  - connectorId: MicrosoftThreatProtection
+    dataTypes:
+      - DeviceProcessEvents
+queryFrequency: 1h
+queryPeriod: 1h
+triggerOperator: gt
+triggerThreshold: 0
+tactics:
+  - CredentialAccess
+relevantTechniques:
+  - T1003.001
+query: |
+  DeviceProcessEvents
+  | where FileName =~ "rundll32.exe"
+      or ProcessVersionInfoOriginalFileName =~ "RUNDLL32.EXE"
+  | where ProcessCommandLine contains "comsvcs"
+  | where ProcessCommandLine contains "minidump"
+      or ProcessCommandLine contains "#24"
+      or ProcessCommandLine contains "#+24"
+  | project TimeGenerated, DeviceName, AccountDomain, AccountName,
+            FileName, ProcessCommandLine,
+            InitiatingProcessFileName, InitiatingProcessCommandLine
+entityMappings:
+  - entityType: Host
+    fieldMappings:
+      - identifier: FullName
+        columnName: DeviceName
+  - entityType: Account
+    fieldMappings:
+      - identifier: Name
+        columnName: AccountName
+      - identifier: NTDomain
+        columnName: AccountDomain
+  - entityType: Process
+    fieldMappings:
+      - identifier: CommandLine
+        columnName: ProcessCommandLine
+version: 1.0.0
+kind: Scheduled
